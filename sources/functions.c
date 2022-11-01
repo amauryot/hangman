@@ -1,52 +1,43 @@
 #include <stdio.h>
-#include "headers/functions.h"
+#include <string.h>
+#include "../headers/functions.h"
 
-void start_game()
+void update_hangman()
 {
-    // TODO
+    printf("  __________   \n");
+    printf("  |/       |   \n");
+    printf("  |        O   \n");
+    printf("  |       /|\\ \n");
+    printf("  |       / \\ \n");
+    printf("  |            \n");
+    printf(" /|\\          \n\n");
 }
 
-int win()
+void update_word(char letter, char *word, char *word_backup)
 {
-    // TODO
-}
+    for (int i = 0; i < strlen(word); i++)
+    {
+        if (letter == word[i])
+        {
+            word_backup[i] = letter;
+        }
 
-int lose()
-{
-    // TODO
+        printf("%c ", word_backup[i]);
+    }
 }
 
 char get_letter()
 {
     char letter;
 
-    printf("\nInsira uma letra: ");
-    scanf("%c", &letter);
+    printf("\n\nDigite uma letra: ");
+    scanf(" %c", &letter);
 
     return letter;
 }
 
-int is_valid()
+void select_word(char *secret_word, char *word_backup)
 {
-    // TODO
-}
-
-void update_hangman()
-{
-    printf("   _________   \n");
-    printf("   |/      |   \n");
-    printf("   |       O   \n");
-    printf("   |      /|\\ \n");
-    printf("   |      / \\ \n");
-    printf("   |           \n");
-    printf(" __|__         \n");
-    printf("\n");
-}
-
-void update_word(char letter, char *word)
-{
-    for (int i = 0; i < strlen(*word); i++)
-    {
-        printf("_ ");
-    }
+    strcpy(secret_word, "MELANCIA");
+    strcpy(word_backup, "________");
 }

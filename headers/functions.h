@@ -1,18 +1,9 @@
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
-void start_game();
-
-int win();
-
-int lose();
-
-char get_letter();
-
-int is_valid();
-
 void update_hangman();
-
-void update_word(char letter, char *word);
+void update_word(char letter, char *word, char *word_backup);
+char get_letter();
+void select_word(char *secret_word, char *word_backup);
 
 #endif
