@@ -2,42 +2,74 @@
 #include <string.h>
 #include "../headers/functions.h"
 
-void update_hangman()
+/**
+ * Select the secret word and define the default word backup.
+ */
+void select_word(char *secret_word, char *word_backup)
 {
-    printf("  __________   \n");
-    printf("  |/       |   \n");
-    printf("  |        O   \n");
-    printf("  |       /|\\ \n");
-    printf("  |       / \\ \n");
-    printf("  |            \n");
+    strcpy(secret_word, "BANANA");
+
+    for (int i = 0; i < strlen(secret_word); i++)
+    {
+        word_backup[i] = '_';
+    }
+}
+
+/**
+ * Draw the body parts if user make a mistake.
+ */
+void update_hangman(int mistakes)
+{
+    printf("  __________     \n");
+    printf("  |/       |     \n");
+    printf("  |        %c    \n", (mistakes >= 1 ? 'O' : ' '));
+    printf("  |       %c%c%c \n", (mistakes >= 3 ? '/' : ' '), (mistakes >= 2 ? '|' : ' '), (mistakes >= 4 ? '\\' : ' '));
+    printf("  |       %c %c  \n", (mistakes >= 5 ? '/' : ' '), (mistakes >= 6 ? '\\' : ' '));
+    printf("  |              \n");
     printf(" /|\\          \n\n");
 }
 
-void update_word(char letter, char *word, char *word_backup)
+/**
+ * Show the letters in correct position of the word.
+ */
+void update_word(char user_letter, char *secret_word, char *word_backup)
 {
-    for (int i = 0; i < strlen(word); i++)
+    for (int i = 0; i < strlen(secret_word); i++)
     {
-        if (letter == word[i])
+        int letter_belongs_word = (user_letter == secret_word[i]);
+
+        if (letter_belongs_word)
         {
-            word_backup[i] = letter;
+            word_backup[i] = user_letter;
         }
 
         printf("%c ", word_backup[i]);
     }
 }
 
-char get_letter()
+/**
+ * Keep the typed letter.
+ */
+void get_letter(char *user_letter)
 {
-    char letter;
-
     printf("\n\nDigite uma letra: ");
-    scanf(" %c", &letter);
-
-    return letter;
+    scanf(" %c", &(*user_letter));
 }
 
-void select_word(char *secret_word, char *word_backup)
+/**
+ * Check if a wrong letter was typed.
+ */
+void check_mistake(char user_letter, char *secret_word, int *mistakes)
 {
-    strcpy(secret_word, "MELANCIA");
-    strcpy(word_backup, "________");
+    for (int i = 0; i < strlen(secret_word); i++)
+    {
+        int letter_belongs_word = (user_letter == secret_word[i]);
+
+        if (letter_belongs_word)
+        {
+            return;
+        }
+    }
+
+    (*mistakes)++;
 }
