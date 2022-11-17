@@ -5,71 +5,64 @@
 #include "../headers/hangman.h"
 
 /**
- * Initialize the game.
+ * Check if the file is in the resources/database.txt.
  */
-void start_game(char user_letter, char *secret_word, char *word_backup, int mistakes)
+// void check_file(FILE *file)
+// {
+//     if (file == NULL)
+//     {
+//         printf("+-------------------------------------------------------------+\n");
+//         printf("|                        *** ERRO ***                         |\n");
+//         printf("| Desculpe, banco de dados não disponível.                    |\n");
+//         printf("| Verifique se o arquivo está na pasta %s |\n", DATABASE_ADDRESS);
+//         printf("+-------------------------------------------------------------+\n");
+//         exit(1);
+//     }
+// }
+
+/**
+ * Generate a random number between 0 and the number of words in the data base (resources/database.txt).
+ */
+int random_number(int number_words)
 {
-    select_word(secret_word, word_backup);
-    update_hangman(mistakes);
-    update_word(user_letter, secret_word, word_backup);
+    srand(time(0));
+
+    return rand() % number_words;
 }
 
 /**
- * Check if the user got all the letters right.
+ * Create the default player word.
  */
-int win(char *word_backup)
-{
-    for (int i = 0; i < strlen(word_backup); i++)
-    {
-        if (word_backup[i] == '_')
-        {
-            return 0;
-        }
-    }
-
-    printf("\n\nParabéns! Você venceu o jogo!!!\n\n");
-    return 1;
-}
-
-/**
- * Check if the user mistake all chances.
- */
-int lose(int mistakes)
-{
-    if (mistakes >= 6)
-    {
-        printf("\n\n Que pena! Você perdeu!!!\n\n");
-        return 1;
-    }
-
-    return 0;
-}
-
-/**
- * Keep the typed letter.
- */
-void get_letter(char *user_letter)
-{
-    printf("\n\nDigite uma letra: ");
-    scanf(" %c", &(*user_letter));
-}
-
-/**
- * Check if a wrong letter was typed.
- */
-void check_mistake(char user_letter, char *secret_word, int *mistakes)
+void default_player_word(char secret_word[], char player_word[])
 {
     for (int i = 0; i < strlen(secret_word); i++)
     {
-        int letter_belongs_word = (user_letter == secret_word[i]);
+        player_word[i] = '_';
+    }
+}
 
-        if (letter_belongs_word)
-        {
-            return;
-        }
+/**
+ * Select the secret word in the database (resources/database.txt) and define the default player word.
+ */
+void select_word(char secret_word[], char player_word[])
+{
+    FILE *file = fopen(DATABASE_ADDRESS, "r");
+
+    // check_file(file);
+
+    int number_words;
+    fscanf(file, "%d", &number_words);
+
+    int random = random_number(number_words);
+
+    for (int i = 0; i <= random; i++)
+    {
+        fscanf(file, "%s", secret_word);
     }
 
-    (*mistakes)++;
+    fclose(file);
+
+    default_player_word(secret_word, player_word);
 }
 
 /**
@@ -77,73 +70,98 @@ void check_mistake(char user_letter, char *secret_word, int *mistakes)
  */
 void update_hangman(int mistakes)
 {
-    printf(" +----------------+ \n");
-    printf(" | H A N G  M A N | \n");
-    printf(" +----------------+ \n");
-    printf("  __________        \n");
-    printf("  |/       |        \n");
-    printf("  |        %c       \n", (mistakes >= 1 ? 'O' : ' '));
-    printf("  |       %c%c%c    \n", (mistakes >= 3 ? '/' : ' '), (mistakes >= 2 ? '|' : ' '), (mistakes >= 4 ? '\\' : ' '));
-    printf("  |       %c %c     \n", (mistakes >= 5 ? '/' : ' '), (mistakes >= 6 ? '\\' : ' '));
-    printf("  |                 \n");
-    printf(" /|\\             \n\n");
+    printf("+----------------+\n");
+    printf("| H A N G  M A N |\n");
+    printf("+----------------+\n");
+    printf("  __________       \n");
+    printf("  |/       |       \n");
+    printf("  |        %c      \n", (mistakes >= 1) ? 'O' : ' ');
+    printf("  |       %c%c%c   \n", (mistakes >= 3) ? '/' : ' ', (mistakes >= 2) ? '|' : ' ', (mistakes >= 4) ? '\\' : ' ');
+    printf("  |       %c %c    \n", (mistakes >= 5) ? '/' : ' ', (mistakes >= 6) ? '\\' : ' ');
+    printf("  |                \n");
+    printf("__|__            \n\n");
 }
 
 /**
  * Show the letters in correct position of the word.
  */
-void update_word(char user_letter, char *secret_word, char *word_backup)
+void update_word(char letter, char secret_word[], char player_word[])
 {
     for (int i = 0; i < strlen(secret_word); i++)
     {
-        int letter_belongs_word = (user_letter == secret_word[i]);
-
-        if (letter_belongs_word)
+        if (letter == secret_word[i])
         {
-            word_backup[i] = user_letter;
+            player_word[i] = letter;
         }
 
-        printf("%c ", word_backup[i]);
+        printf("%c ", player_word[i]);
     }
 }
 
 /**
- * Select the secret word in the data base (../resources/words.txt) and define the default word backup.
+ * Initialize the game.
  */
-void select_word(char *secret_word, char *word_backup)
+void start_game(char letter, char secret_word[], char player_word[], int mistakes)
 {
-    FILE *file;
+    select_word(secret_word, player_word);
+    update_hangman(mistakes);
+    update_word(letter, secret_word, player_word);
+}
 
-    file = fopen("resources/database.txt", "r"); // "r" = read file mode
-    if (!file)
+/**
+ * Check if the player got all the letters right.
+ */
+int win(char player_word[])
+{
+    for (int i = 0; i < strlen(player_word); i++)
     {
-        printf(" +-------------------------------------------------------------+ \n");
-        printf(" |                        *** ERRO ***                         | \n");
-        printf(" | Desculpe, banco de dados nï¿½o disponï¿½vel.                    | \n");
-        printf(" | Verifique se o arquivo estï¿½ na pasta ../resources/words.txt | \n");
-        printf(" +-------------------------------------------------------------+ \n");
-        exit(1);
+        if (player_word[i] == '_')
+        {
+            return 0;
+        }
     }
 
-    // The information about number of words is in the 1st line of the data base (../resources/words.txt).
-    int words;
-    fscanf(file, "%d", &words);
+    printf("\n\nParabéns! Você venceu o jogo!!!\n\n");
 
-    // Generate a radom number between 0 and the number of words in the data base (../resources/words.txt).
-    srand(time(0));
-    int radom = rand() % words;
+    return 1;
+}
 
-    // Keep the word.
-    for (int i = 0; i <= radom; i++)
+/**
+ * Check if the player mistake all chances.
+ */
+int lose(int mistakes)
+{
+    if (mistakes >= 6)
     {
-        fscanf(file, "%s", secret_word);
+        printf("\n\n Que pena! Você perdeu!!!\n\n");
+
+        return 1;
     }
 
-    fclose(file);
+    return 0;
+}
 
-    // Create the default word backup.
+/**
+ * Save the typed letter.
+ */
+void get_letter(char *letter)
+{
+    printf("\n\nDigite uma letra: ");
+    scanf(" %c", &(*letter));
+}
+
+/**
+ * Check if a wrong letter was typed.
+ */
+void check_mistake(char letter, char secret_word[], int *mistakes)
+{
     for (int i = 0; i < strlen(secret_word); i++)
     {
-        word_backup[i] = '_';
+        if (letter == secret_word[i])
+        {
+            return;
+        }
     }
+
+    (*mistakes)++;
 }
