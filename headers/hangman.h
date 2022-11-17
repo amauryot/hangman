@@ -1,5 +1,5 @@
-#ifndef FUNCTIONS_H
-#define FUNCTIONS_H
+#ifndef _HANGMAN_H_
+#define _HANGMAN_H_
 
 #define WORD_MAX_SIZE 20
 

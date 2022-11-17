@@ -1,6 +1,6 @@
 #include <locale.h>
 #include <stdlib.h>
-#include "headers/functions.h"
+#include "headers/hangman.h"
 
 int main()
 {

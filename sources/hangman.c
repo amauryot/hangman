@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <time.h>
-#include "../headers/functions.h"
+#include "../headers/hangman.h"
 
 /**
  * Initialize the game.
@@ -114,13 +114,13 @@ void select_word(char *secret_word, char *word_backup)
 {
     FILE *file;
 
-    file = fopen("resources/words.txt", "r"); // "r" = read file mode
+    file = fopen("resources/database.txt", "r"); // "r" = read file mode
     if (!file)
     {
         printf(" +-------------------------------------------------------------+ \n");
         printf(" |                        *** ERRO ***                         | \n");
-        printf(" | Desculpe, banco de dados não disponível.                    | \n");
-        printf(" | Verifique se o arquivo está na pasta ../resources/words.txt | \n");
+        printf(" | Desculpe, banco de dados nï¿½o disponï¿½vel.                    | \n");
+        printf(" | Verifique se o arquivo estï¿½ na pasta ../resources/words.txt | \n");
         printf(" +-------------------------------------------------------------+ \n");
         exit(1);
     }
