@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 #include <locale.h>
 #include "headers/hangman.h"
@@ -14,7 +15,7 @@ int main()
     system("cls");
     start_game(letter, secret_word, player_word, mistakes);
 
-    while (!win(player_word) && !lose(mistakes))
+    while (!endgame(player_word, mistakes))
     {
         get_letter(&letter);
         check_mistake(letter, secret_word, &mistakes);

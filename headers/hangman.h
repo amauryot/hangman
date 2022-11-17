@@ -1,8 +1,6 @@
 #ifndef _HANGMAN_H_
 #define _HANGMAN_H_
 
-#include <stdio.h>
-
 #define WORD_MAX_SIZE 20
 #define DATABASE_ADDRESS "resources/database.txt"
 
@@ -50,6 +48,11 @@ int win(char player_word[]);
  * Check if the player mistake all chances.
  */
 int lose(int mistakes);
+
+/**
+ * Returns if the game is over.
+ */
+int endgame(char player_word[], int mistakes);
 
 /**
  * Save the typed letter.

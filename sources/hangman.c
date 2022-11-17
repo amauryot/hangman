@@ -133,12 +133,20 @@ int lose(int mistakes)
 {
     if (mistakes >= 6)
     {
-        printf("\n\n Que pena! Você perdeu!!!\n\n");
+        printf("\n\nQue pena! Você perdeu!!!\n\n");
 
         return 1;
     }
 
     return 0;
+}
+
+/**
+ * Returns if the game is over.
+ */
+int endgame(char player_word[], int mistakes)
+{
+    return win(player_word) || lose(mistakes);
 }
 
 /**
