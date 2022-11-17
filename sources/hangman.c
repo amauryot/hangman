@@ -7,18 +7,18 @@
 /**
  * Check if the file is in the resources/database.txt.
  */
-// void check_file(FILE *file)
-// {
-//     if (file == NULL)
-//     {
-//         printf("+-------------------------------------------------------------+\n");
-//         printf("|                        *** ERRO ***                         |\n");
-//         printf("| Desculpe, banco de dados não disponível.                    |\n");
-//         printf("| Verifique se o arquivo está na pasta %s |\n", DATABASE_ADDRESS);
-//         printf("+-------------------------------------------------------------+\n");
-//         exit(1);
-//     }
-// }
+void check_file(FILE *file)
+{
+    if (file == NULL)
+    {
+        printf("+-------------------------------------------------------------+\n");
+        printf("|                        *** ERRO ***                         |\n");
+        printf("| Desculpe, banco de dados não disponível.                    |\n");
+        printf("| Verifique se o arquivo está na pasta %s |\n", DATABASE_ADDRESS);
+        printf("+-------------------------------------------------------------+\n");
+        exit(1);
+    }
+}
 
 /**
  * Generate a random number between 0 and the number of words in the data base (resources/database.txt).
@@ -48,7 +48,7 @@ void select_word(char secret_word[], char player_word[])
 {
     FILE *file = fopen(DATABASE_ADDRESS, "r");
 
-    // check_file(file);
+    check_file(file);
 
     int number_words;
     fscanf(file, "%d", &number_words);

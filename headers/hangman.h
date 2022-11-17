@@ -1,13 +1,15 @@
 #ifndef _HANGMAN_H_
 #define _HANGMAN_H_
 
+#include <stdio.h>
+
 #define WORD_MAX_SIZE 20
 #define DATABASE_ADDRESS "resources/database.txt"
 
 /**
  * Check if the file is in the ../resources/database.txt.
  */
-//void check_file(FILE *file);
+void check_file(FILE *file);
 
 /**
  * Generate a random number between 0 and the number of words in the data base (../resources/database.txt).
